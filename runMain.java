@@ -44,7 +44,7 @@ public class runMain{
                         itemCount++;
                         System.out.println();     
                      }   
-                     System.out.print("\nItem/s successfully added to storage!");
+                     System.out.print("Item/s successfully added to storage!");
                      storageLoop = runMain.backOrChangeMode();//Back or Change Mode na choice
                      if (storageLoop == false) {
                         loop = true;
@@ -147,6 +147,23 @@ public class runMain{
                      loop = true;
                   }
                }while(storageLoop);
+            }
+            if (modeChoice == 2) {
+               String[] items = new String [itemCount];
+               
+               System.out.println("\n     <<< MARKET >>>");  
+               if (itemsList.isEmpty()) { 
+                  System.out.println("No items yet in the Market.\n"); 
+                     loop = true;
+               } else { 
+                  System.out.println("\nITEMS AVAILABLE:"); 
+                  for (Items item : itemsList) { 
+                     item.availableItems();    // Display tanan item nga na-register                     
+                     System.out.println();
+                  }
+                   
+                  loop = true;
+                  }
             }
          }                   
          catch (Exception  e) {
