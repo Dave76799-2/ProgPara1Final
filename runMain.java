@@ -154,8 +154,14 @@ public class runMain{
                         totalValue += item.totalValue();
                      }
                      System.out.println("___ _ _ _ _ _ _ _ _ _ _ _ ___");
-                     System.out.println("||     TOTAL VALUE: " +totalValue + "    ||");
+                     System.out.println("||     <<TOTAL VALUE>>     ||");
                      System.out.println("||_ _ _ _ _ _ _ _ _ _ _ _ _|| \n");
+                     System.out.println("Php " + totalValue);
+                     storageLoop = runMain.backOrChangeMode();//Back or Change Mode na choice
+                     if (storageLoop == false) {
+                        loop = true;
+                     }
+                  
                   }
                   else if (menuOption == 5) {loop = true;}
                   else {
@@ -221,8 +227,5 @@ public class runMain{
       } 
       return loopActivate; 
    }
-   
-   
-   
    
 }
