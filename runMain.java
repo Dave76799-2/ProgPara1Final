@@ -5,27 +5,23 @@ public class runMain{
       Scanner scan = new Scanner(System.in);
       boolean loop = true, storageLoop =true;
       int itemCount =0;
-   
-      ArrayList<Items> itemsList = new ArrayList<>();      
+      
+      ArrayList<Items> itemsList = new ArrayList<>();  
+      History history = new History ();    
       
       while (loop) {
          loop = false;
-         double totalValue =0;
          try {                
-            System.out.println("___ _ _ _ _ _ _ _ _ _ _ _ ___");
-            System.out.println("||  Welcome To Storagez!   ||");
-            System.out.println("||_ _ _ _ _ _ _ _ _ _ _ _ _|| \n");
+            System.out.println("  Welcome to storagez!");
+            System.out.println("_ _ _ _ _ _ _ _ _ _ _ _ _ \n");
             System.out.print("[1] INVENTORY\n[2] MARKET\n[3] STORAGE HISTORY\nCHOOSE A MODE: ");
             int modeChoice = scan.nextInt();
             scan.nextLine();
             
             if (modeChoice ==1) {
                do {        
-                  storageLoop = false;
-                  System.out.println("___ _ _ _ _ _ _ _ _ _ _ _ ___");
-                  System.out.println("||      Storage Mode       ||");
-                  System.out.println("||_ _ _ _ _ _ _ _ _ _ _ _ _|| \n");               
-                  System.out.print("[1] ADD ITEM/s\n[2] UPDATE ITEM/s\n[3] VIEW INVENTORY\n[4] TOTAL VALUE OF ITEMS\n[5] BACK\nCHOOSE AN OPTION: ");   
+                  storageLoop = false;               
+                  System.out.print("\n[1] ADD ITEM/s\n[2] UPDATE ITEM/s\n[3] VIEW INVENTORY\n[4] TOTAL VALUE OF ITEMS\n[5] BACK\nCHOOSE AN OPTION: ");   
                   int menuOption = scan.nextInt();
                   scan.nextLine();
                   
@@ -37,7 +33,7 @@ public class runMain{
                         System.out.print("Item #" + (i+1) + " name: ");
                         String name = scan.nextLine();  
                        
-                        System.out.print("Item #" + (i+1) + " price: Php ");
+                        System.out.print("Item #" + (i+1) + " price: ");
                         double price = scan.nextDouble(); 
                      
                         System.out.print("Item #" + (i+1) + " quantity: ");
@@ -47,11 +43,13 @@ public class runMain{
                         Items item = new Items(name, price, quantity);
                         itemsList.add(item);
                         itemCount++;
-                        System.out.println();     
-                     }
-                     System.out.println("___ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ ___");
-                     System.out.println("||   Item/s successfully added to storage!   ||");
-                     System.out.println("||_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _||");                
+                        System.out.println();   
+                        
+                        history.stockIncreaseRecord(name, quantity, price);
+                        System.out.println();
+                          
+                     }   
+                     System.out.print("\nItem/s successfully added to storage!");
                      storageLoop = runMain.backOrChangeMode();//Back or Change Mode na choice
                      if (storageLoop == false) {
                         loop = true;
@@ -85,13 +83,21 @@ public class runMain{
                               case 2:
                                  System.out.print("Enter new price: ");
                                  double newPrice = scan.nextDouble();
+                                 double oldPrice = item.getPrice();
                                  item.setPrice(newPrice);  
+                                 history.priceChangeRecord(item.getName(), oldPrice, newPrice);
                                  System.out.println("ITEM PRICE UPDATED SUCCESSFULLY.");
                                  break;
                            
                               case 3:
                                  System.out.print("Enter new quantity: ");
                                  int newQuantity = scan.nextInt();
+                                 int oldQuantity = item.getQuantity();
+                                 if (newQuantity > oldQuantity) {
+                                    history.stockIncreaseRecord(item.getName(), newQuantity - oldQuantity, item.getPrice());
+                                 } else {
+                                    history.stockDecreaseRecord(item.getName(), oldQuantity - newQuantity, item.getPrice());
+                                 }
                                  item.setQuantity(newQuantity);  
                                  System.out.println("ITEM QUANTITY UPDATED SUCCESSFULLY.");
                                  break;
@@ -134,9 +140,7 @@ public class runMain{
                         System.out.println("No items in the inventory.");
                         loop = true;
                      }else{
-                        System.out.println("___ _ _ _ _ _ _ _ _ _ _ _ ___");
-                        System.out.println("||    INVENTORY DETAILS    ||");
-                        System.out.println("||_ _ _ _ _ _ _ _ _ _ _ _ _|| \n");       
+                        System.out.println("\nINVENTORY DETAILS:"); 
                         for (Items item : itemsList) {
                            item.availableItems(); // Display tanan item nga na-register                     
                            System.out.println();
@@ -149,20 +153,7 @@ public class runMain{
                   }
                   
                   
-                  else if (menuOption == 4) {
-                     for (Items item : itemsList) {
-                        totalValue += item.totalValue();
-                     }
-                     System.out.println("___ _ _ _ _ _ _ _ _ _ _ _ ___");
-                     System.out.println("||     <<TOTAL VALUE>>     ||");
-                     System.out.println("||_ _ _ _ _ _ _ _ _ _ _ _ _|| \n");
-                     System.out.println("Php " + totalValue);
-                     storageLoop = runMain.backOrChangeMode();//Back or Change Mode na choice
-                     if (storageLoop == false) {
-                        loop = true;
-                     }
-                  
-                  }
+                  else if (menuOption == 4) {}
                   else if (menuOption == 5) {loop = true;}
                   else {
                      System.out.println("Error In the input! Please try again..\n");
@@ -170,35 +161,20 @@ public class runMain{
                   }
                }while(storageLoop);
             }
-            else if (modeChoice == 2) {
-               String[] items = new String [itemCount];
-               
-               System.out.println("___ _ _ _ _ _ _ _ _ _ _ _ ___");
-               System.out.println("||       Market Mode       ||");
-               System.out.println("||_ _ _ _ _ _ _ _ _ _ _ _ _|| \n");  
-               if (itemsList.isEmpty()) { 
-                  System.out.println("No items yet in the Market.\n"); 
-                  loop = true;
-               } else { 
-                  System.out.println("\nITEMS AVAILABLE:"); 
-                  for (Items item : itemsList) { 
-                     item.availableItems();    // Display tanan item nga na-register                     
-                     System.out.println();
-                  }
-                   
+            
+            if (modeChoice == 3) {
+               history.displayHistory();
+               storageLoop = runMain.backOrChangeMode();
+               if (!storageLoop) {
                   loop = true;
                }
-            }
-            else {
-               System.out.println("\nError In the input! Please try again..\n");
-               loop = true;
-            }
+            }           
          }                   
          catch (Exception  e) {
             System.out.println("\nAN ERROR OCCURRED.. TRY AGAIN? [y/n]: ");
             scan.nextLine();
             char tryAgain = scan.next().charAt(0);
-            
+         
             if (tryAgain == 'y' || tryAgain == 'Y') {
                loop = true;
                scan.nextLine();
@@ -227,5 +203,8 @@ public class runMain{
       } 
       return loopActivate; 
    }
+   
+   
+   
    
 }
