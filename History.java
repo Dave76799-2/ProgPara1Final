@@ -14,7 +14,8 @@ public class History {
       }
    
       public void recordDisplay() {
-         System.out.print("Updated History: \n");
+         System.out.print("_________________");
+         System.out.print("\nUpdated History: \n");
          System.out.println("Type: " + type);
          System.out.println("Item: " + name);
          System.out.println("Price: Php " + price);
@@ -56,11 +57,22 @@ public class History {
       historyRecord.add(new Record("Stock Decrease", name, details, price));
    }
 
+   public void updateAllRecord(String oldName, double oldPrice, int oldQuantity, String newName, double newPrice, int newQuantity) {
+      String details = "Updated all fields:\n\n" +
+                     "Name: From" + oldName + " to " + newName + ";\n" +
+                     "Price: From Php " + oldPrice + " to Php " + newPrice + ";\n" +
+                     "Quantity: " + oldQuantity + "units to " + newQuantity + " units";
+      historyRecord.add(new Record("Full Update", newName, details, newPrice));
+}
+
    public void displayHistory() {
       if (historyRecord.isEmpty()) {
          System.out.println("No history records available.");
       } else {
-         System.out.println("\nSTORAGE HISTORY (Stocks added/decreased and Items sold):\n");
+          System.out.println("___ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ ___");
+          System.out.println("||               STORAGE HISTORY             ||");
+          System.out.println("||  (Added/Decreased Items and Sold Items)   ||");
+          System.out.println("||_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _||");
          for (Record record : historyRecord) {
             record.recordDisplay();
          }
