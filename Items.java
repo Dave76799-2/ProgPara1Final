@@ -43,5 +43,9 @@ public class Items {
    public void setPrice(double price) {
         this.price = price;
     }
+    
+   public double totalValue() {
+      return this.price*this.quantity;
+   }
    
 }
