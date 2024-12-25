@@ -51,7 +51,7 @@ public class runMain{
                      }
                      System.out.println("___ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ ___");
                      System.out.println("||   Item/s successfully added to storage!   ||");
-                     System.out.println("||_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _|| \n");                
+                     System.out.println("||_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _||");                
                      storageLoop = runMain.backOrChangeMode();//Back or Change Mode na choice
                      if (storageLoop == false) {
                         loop = true;
