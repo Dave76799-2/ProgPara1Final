@@ -195,20 +195,53 @@ public class runMain{
             else if (modeChoice == 2) {
                String[] items = new String [itemCount];
                
-               System.out.println("___ _ _ _ _ _ _ _ _ _ _ _ ___");
+               System.out.println("_ _ _ _ _ _ _ _ _ _ _ _ _");
                System.out.println("||       Market Mode       ||");
                System.out.println("||_ _ _ _ _ _ _ _ _ _ _ _ _|| \n");  
                if (itemsList.isEmpty()) { 
-                  System.out.println("\nNo items yet in the Market.\n"); 
+                  System.out.println("No available items in the Market yet.\n"); 
                   loop = true;
                } else { 
                   System.out.println("\nITEMS AVAILABLE:"); 
                   for (Items item : itemsList) { 
-                     item.availableItems();    // Display tanan item nga na-register                     
+                     item.availableItems();                      
                      System.out.println();
                   }
-                   
-                  loop = true;
+                  
+                  System.out.println("[1] SELL");
+                  System.out.println("[2] BACK");  
+                  System.out.print("CHOOSE AN OPTION: "); 
+                  int option = scan.nextInt();
+                  scan.nextLine();
+                  
+                  if (option == 1) {
+                     System.out.println("------------------------------------");
+                     System.out.print("Name of the item to sell?: ");
+                     String sellName = scan.nextLine();
+                     
+                     boolean found = false;
+                     
+                     for (int i = 0; i < itemsList.size(); i++) {
+                        Items item = itemsList.get(i);
+                        if (item.getName().equalsIgnoreCase(sellName)) {
+                           found = true; 
+                           System.out.print("How many " + '"' + sellName + "/s" + '"' + " to be sold: ");
+                           int sellQty = scan.nextInt();
+                           scan.nextLine();
+                           
+                           int newQuantity = item.sell(sellQty);
+                           System.out.print(sellName + " now only has " + newQuantity + " pcs.");
+                        
+                           System.out.println("A pleasure doing business with you!");
+                           loop = true;
+                        } else {
+                           System.out.println("\nITEM NOT FOUND!");
+                           loop = true;
+                        }
+                     }
+                  } else if (option == 2) { 
+                     loop = true;
+                  }
                }
             }
             
@@ -225,14 +258,15 @@ public class runMain{
             
          }                   
          catch (Exception  e) {
+            System.out.println("\nAN ERROR OCCURRED.. ");
             char tryAgain = runMain.errorHandler();
             
             if (tryAgain == 'y' || tryAgain == 'Y') {
-               loop = true;
+               loop = true;  
                scan.nextLine();
             }else {
                scan.close();
-            }   
+            }
          }
       }//end sa while loop
               
@@ -241,22 +275,23 @@ public class runMain{
    public static boolean backOrChangeMode() {
       Scanner scan = new Scanner(System.in);
       boolean loopActivate = false, escapeLoop;
-    do {  
-      escapeLoop = true;
-      System.out.print("\n[1] BACK\n[2] CHANGE MODE\nChoose an option: ");
-      int choice = scan.nextInt();
-      scan.nextLine();
+      do {  
+         escapeLoop = true;
+         System.out.print("\n[1] BACK\n[2] CHANGE MODE\nChoose an option: ");
+         int choice = scan.nextInt();
+         scan.nextLine();
                   
-      if (choice == 1) {
-         loopActivate = true;
-      }
-      else if (choice == 2) {
-         loopActivate = false;
-      }
-      else {
-         System.out.print("\nInvalid input! Try again:");
-         escapeLoop = false;
-      }
+         if (choice == 1) {
+            loopActivate = true;
+         }
+         else if (choice == 2) {
+            loopActivate = false;
+         }
+         else {
+            System.out.println();
+            System.out.print("Invalid input! Try again:");
+            escapeLoop = false;
+         }
       }while(escapeLoop != true);
       return loopActivate; 
    }
@@ -273,7 +308,8 @@ public class runMain{
             loopActivate = true;
          }
          else{
-            System.out.print("\nInvalid input!");
+            System.out.println();
+            System.out.print("Invalid input!");
             loopActivate = false;
          } 
       }while(loopActivate == false);
@@ -282,9 +318,10 @@ public class runMain{
    
    public static char errorHandler() {
       Scanner scan = new Scanner(System.in);
-      System.out.println("\nAN ERROR OCCURRED..");
+      
       char c;
       do {
+      
          System.out.print("TRY AGAIN? [y/n]: ");
          c = scan.next().charAt(0);
       
@@ -298,7 +335,7 @@ public class runMain{
          else {
             c = 'x';
          }
-      }while (c != 'y' || c != 'n');
+      }while (c != 'y' && c != 'n');
       return c;
    }
    
