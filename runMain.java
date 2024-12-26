@@ -13,7 +13,7 @@ public class runMain{
          loop = false;
          double totalValue =0;
          try {                
-            System.out.println("___ _ _ _ _ _ _ _ _ _ _ _ ___");
+            System.out.println("_ _ _ _ _ _ _ _ _ _ _ _ _");
             System.out.println("||  Welcome To Storagez!   ||");
             System.out.println("||_ _ _ _ _ _ _ _ _ _ _ _ _||");
             System.out.println();
@@ -24,7 +24,7 @@ public class runMain{
             if (modeChoice ==1) {
                do {        
                   storageLoop = false;
-                  System.out.println("___ _ _ _ _ _ _ _ _ _ _ _ ___");
+                  System.out.println("_ _ _ _ _ _ _ _ _ _ _ _ _");
                   System.out.println("||      Storage Mode       ||");
                   System.out.println("||_ _ _ _ _ _ _ _ _ _ _ _ _|| \n");               
                   System.out.print("[1] ADD ITEM/s\n[2] UPDATE ITEM/s\n[3] VIEW INVENTORY\n[4] TOTAL VALUE OF ITEMS\n[5] BACK\nCHOOSE AN OPTION: ");   
@@ -54,7 +54,7 @@ public class runMain{
                         history.stockIncreaseRecord(name, quantity, price);
                         System.out.println();
                      }
-                     System.out.println("___ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ ___");
+                     System.out.println("_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _");
                      System.out.println("||   Item/s successfully added to storage!   ||");
                      System.out.println("||_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _||\n");                
                      storageLoop = runMain.backOrChangeMode();//Back or Change Mode na choice
@@ -162,7 +162,7 @@ public class runMain{
                         }
                      
                      }else{
-                        System.out.println("___ _ _ _ _ _ _ _ _ _ _ _ ___");
+                        System.out.println("_ _ _ _ _ _ _ _ _ _ _ _ _");
                         System.out.println("||    INVENTORY DETAILS    ||");
                         System.out.println("||_ _ _ _ _ _ _ _ _ _ _ _ _|| \n");       
                         for (Items item : itemsList) {
@@ -181,7 +181,7 @@ public class runMain{
                      for (Items item : itemsList) {
                         totalValue += item.totalValue();
                      }
-                     System.out.println("___ _ _ _ _ _ _ _ _ _ _ _ ___");
+                     System.out.println("_ _ _ _ _ _ _ _ _ _ _ _ _");
                      System.out.println("||     <<TOTAL VALUE>>     ||");
                      System.out.println("||_ _ _ _ _ _ _ _ _ _ _ _ _|| \n");
                      System.out.println("Php " + totalValue);
@@ -201,7 +201,7 @@ public class runMain{
             else if (modeChoice == 2) {
                String[] items = new String [itemCount];
                
-               System.out.println("___ _ _ _ _ _ _ _ _ _ _ _ ___");
+               System.out.println("_ _ _ _ _ _ _ _ _ _ _ _ _");
                System.out.println("||       Market Mode       ||");
                System.out.println("||_ _ _ _ _ _ _ _ _ _ _ _ _|| ");  
                if (itemsList.isEmpty()) { 
@@ -240,6 +240,9 @@ public class runMain{
                            
                            if (newQuantity >= 0) {
                               item.setQuantity(newQuantity);
+                              
+                               double totalAmount = sellQty * item.price;
+                               history.addSaleRecord(sellName, sellQty, totalAmount, item.price);
                            }
                            System.out.println();                   
                            System.out.println("Name: " + sellName + "\nPrice: Php " + item.price + " || QTY: " + item.quantity);        
