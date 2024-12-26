@@ -49,7 +49,14 @@ public class Items {
    }
    
    public int sell(int amount) {
-      return this.quantity - amount;
+   int itemsLeft =-10;
+   if (amount > this.quantity) {
+      System.out.println("Not enough items in the inventory!!");
+   }
+   else {
+      itemsLeft = this.quantity - amount;
+   }
+      return itemsLeft;
    }
    
 }
