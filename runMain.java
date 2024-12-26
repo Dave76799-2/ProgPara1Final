@@ -15,7 +15,8 @@ public class runMain{
          try {                
             System.out.println("___ _ _ _ _ _ _ _ _ _ _ _ ___");
             System.out.println("||  Welcome To Storagez!   ||");
-            System.out.println("||_ _ _ _ _ _ _ _ _ _ _ _ _|| \n");
+            System.out.println("||_ _ _ _ _ _ _ _ _ _ _ _ _||");
+            System.out.println();
             System.out.print("[1] INVENTORY\n[2] MARKET\n[3] STORAGE HISTORY\nCHOOSE A MODE: ");
             int modeChoice = scan.nextInt();
             scan.nextLine();
@@ -40,7 +41,7 @@ public class runMain{
                        
                         System.out.print("Item #" + (i+1) + " price: Php ");
                         double price = scan.nextDouble(); 
-                     
+                        scan.nextLine();
                         System.out.print("Item #" + (i+1) + " quantity: ");
                         int quantity = scan.nextInt();   
                         scan.nextLine();
@@ -76,7 +77,7 @@ public class runMain{
                         
                            System.out.println("\nWhat would you like to update?\n[1] Name\n[2] Price\n[3] Quantity\n[4] Update all elements");
                            int updateOption = scan.nextInt();
-                        
+                           scan.nextLine();
                            switch (updateOption) {
                               case 1:
                                  scan.nextLine();
@@ -89,6 +90,7 @@ public class runMain{
                               case 2:
                                  System.out.print("Enter new price: ");
                                  double newPrice = scan.nextDouble();
+                                 scan.nextLine();
                                  double oldPrice = item.getPrice();
                                  item.setPrice(newPrice);  
                                  history.priceChangeRecord(item.getName(), oldPrice, newPrice);
@@ -98,6 +100,7 @@ public class runMain{
                               case 3:
                                  System.out.print("Enter new quantity: ");
                                  int newQuantity = scan.nextInt();
+                                 scan.nextLine();
                                  int oldQuantity = item.getQuantity();
                                  if (newQuantity > oldQuantity) {
                                     history.stockIncreaseRecord(item.getName(), newQuantity - oldQuantity, item.getPrice());
@@ -124,6 +127,7 @@ public class runMain{
                               
                                  System.out.print("Enter new quantity: ");
                                  newQuantity = scan.nextInt();
+                                 scan.nextLine();
                                  item.setQuantity(newQuantity);
                                  
                                  history.updateAllRecord(oldName, oldPrice, oldQuantity, newName, newPrice, newQuantity);
@@ -195,14 +199,15 @@ public class runMain{
             else if (modeChoice == 2) {
                String[] items = new String [itemCount];
                
-               System.out.println("_ _ _ _ _ _ _ _ _ _ _ _ _");
+               System.out.println("___ _ _ _ _ _ _ _ _ _ _ _ ___");
                System.out.println("||       Market Mode       ||");
-               System.out.println("||_ _ _ _ _ _ _ _ _ _ _ _ _|| \n");  
+               System.out.println("||_ _ _ _ _ _ _ _ _ _ _ _ _|| ");  
                if (itemsList.isEmpty()) { 
                   System.out.println("No available items in the Market yet.\n"); 
                   loop = true;
                } else { 
-                  System.out.println("\nITEMS AVAILABLE:"); 
+                  System.out.println();
+                  System.out.println("ITEMS AVAILABLE:"); 
                   for (Items item : itemsList) { 
                      item.availableItems();                      
                      System.out.println();
@@ -230,7 +235,12 @@ public class runMain{
                            scan.nextLine();
                            
                            int newQuantity = item.sell(sellQty);
-                           System.out.print(sellName + " now only has " + newQuantity + " pcs.");
+                           
+                           if (newQuantity >= 0) {
+                              item.setQuantity(newQuantity);
+                           }
+                                              
+                           System.out.println(sellName + " now only has " + item.quantity + " pcs left.");
                         
                            System.out.println("A pleasure doing business with you!");
                            loop = true;
@@ -258,41 +268,65 @@ public class runMain{
             
          }                   
          catch (Exception  e) {
-            System.out.println("\nAN ERROR OCCURRED.. ");
-            char tryAgain = runMain.errorHandler();
+            System.out.println("\nAN ERROR OCCURRED.. ");      
+            do {
             
-            if (tryAgain == 'y' || tryAgain == 'Y') {
-               loop = true;  
+               System.out.print("TRY AGAIN? [y/n]: ");
                scan.nextLine();
-            }else {
-               scan.close();
-            }
-         }
-      }//end sa while loop
+               char c = scan.next().charAt(0);
+            
+            
+               if (c == 'Y' || c == 'y') {
+                  c = 'y';
+                  loop = true;
+                  break;
+               }else if (c == 'n' || c == 'N') {
+                  c ='n';
+                  loop = false;
+                  break;
+               }else {}
+            
+            }while (true);            
+            
+         }//end sa while loop
               
+      }
    }
    
    public static boolean backOrChangeMode() {
       Scanner scan = new Scanner(System.in);
-      boolean loopActivate = false, escapeLoop;
-      do {  
-         escapeLoop = true;
-         System.out.print("\n[1] BACK\n[2] CHANGE MODE\nChoose an option: ");
-         int choice = scan.nextInt();
-         scan.nextLine();
-                  
-         if (choice == 1) {
-            loopActivate = true;
-         }
-         else if (choice == 2) {
-            loopActivate = false;
-         }
-         else {
+      boolean loopActivate = false, escapeLoop = false;
+      
+     
+      do {
+         try{  
+            escapeLoop = true;
+            System.out.println("[1] BACK");
+            System.out.println("[2] CHANGE MODE");
+            System.out.print("Choose an option: ");
+            int choice = scan.nextInt();
+            scan.nextLine();
+            
+            if (choice == 1) {
+               loopActivate = true;
+            }
+            else if (choice == 2) {
+               loopActivate = false;
+            }
+            else {
+               System.out.println();
+               System.out.print("Invalid input! Try again:");
+               escapeLoop = false;
+            }
+         }catch (Exception e) {
             System.out.println();
-            System.out.print("Invalid input! Try again:");
+            System.out.println("INVALID INPUT.. ");
+            System.out.println();
             escapeLoop = false;
+            scan.nextLine();
          }
       }while(escapeLoop != true);
+      
       return loopActivate; 
    }
    
@@ -300,43 +334,32 @@ public class runMain{
       Scanner scan = new Scanner(System.in);
       boolean loopActivate = false;
       do {
-         System.out.print("\n[1] BACK TO MODE MENU\nChoose an option: ");
-         int choice = scan.nextInt();
-         scan.nextLine();
-                  
-         if (choice == 1) {
+         try{  
             loopActivate = true;
-         }
-         else{
+            System.out.println("[1] BACK to mode menu"); 
+            System.out.print("Choose an option: ");
+            int choice = scan.nextInt();
+            scan.nextLine();
+            
+            if (choice == 1) {
+               loopActivate = true;
+            }
+            else {
+               System.out.println();
+               System.out.println("INVALID INPUT.. ");
+               loopActivate = false;
+            }
+         }catch (Exception e) {
             System.out.println();
-            System.out.print("Invalid input!");
+            System.out.println("INVALID INPUT.. ");
+            System.out.println();
             loopActivate = false;
-         } 
-      }while(loopActivate == false);
+            scan.nextLine();
+         }
+      }while(loopActivate != true);
       return loopActivate; 
    }
    
-   public static char errorHandler() {
-      Scanner scan = new Scanner(System.in);
-      
-      char c;
-      do {
-      
-         System.out.print("TRY AGAIN? [y/n]: ");
-         c = scan.next().charAt(0);
-      
-         if (c == 'Y' || c == 'y') {
-            c = 'y';
-            break;
-         }else if (c == 'n' || c == 'N') {
-            c ='n';
-            break;
-         }
-         else {
-            c = 'x';
-         }
-      }while (c != 'y' && c != 'n');
-      return c;
-   }
+   
    
 }
