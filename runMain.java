@@ -76,14 +76,14 @@ public class runMain{
                            System.out.println("\nItem found: " + "\nName: " + item.getName() + "\nPrice: " + item.getPrice() + "\nQuantity: " + item.getQuantity());
                         
                            System.out.println("\nWhat would you like to update?\n[1] Name\n[2] Price\n[3] Quantity\n[4] Update all elements");
-                           int updateOption = scan.nextInt();
-                           scan.nextLine();
+                           int updateOption = scan.nextInt();                 
                            switch (updateOption) {
                               case 1:
                                  scan.nextLine();
                                  System.out.print("Enter new name: ");
                                  String newName = scan.nextLine();
                                  item.setName(newName);  
+                                 System.out.println();
                                  System.out.println("ITEM NAME UPDATED SUCCESSFULLY.");
                                  break;
                            
@@ -94,6 +94,7 @@ public class runMain{
                                  double oldPrice = item.getPrice();
                                  item.setPrice(newPrice);  
                                  history.priceChangeRecord(item.getName(), oldPrice, newPrice);
+                                 System.out.println();
                                  System.out.println("ITEM PRICE UPDATED SUCCESSFULLY.");
                                  break;
                            
@@ -108,6 +109,7 @@ public class runMain{
                                     history.stockDecreaseRecord(item.getName(), oldQuantity - newQuantity, item.getPrice());
                                  }
                                  item.setQuantity(newQuantity);  
+                                 System.out.println();
                                  System.out.println("ITEM QUANTITY UPDATED SUCCESSFULLY.");
                                  break;
                            
@@ -131,7 +133,7 @@ public class runMain{
                                  item.setQuantity(newQuantity);
                                  
                                  history.updateAllRecord(oldName, oldPrice, oldQuantity, newName, newPrice, newQuantity);
-                              
+                                 System.out.println();
                                  System.out.println("ALL ITEM DETAILS UPDATED SUCCESSFULLY.");
                                  break;
                            
@@ -239,10 +241,9 @@ public class runMain{
                            if (newQuantity >= 0) {
                               item.setQuantity(newQuantity);
                            }
-                                              
-                           System.out.println(sellName + " now only has " + item.quantity + " pcs left.");
-                        
-                           System.out.println("A pleasure doing business with you!");
+                           System.out.println();                   
+                           System.out.println("Name: " + sellName + "\nPrice: Php " + item.price + " || QTY: " + item.quantity);        
+                           
                            loop = true;
                         } else {
                            System.out.println("\nITEM NOT FOUND!");
@@ -331,6 +332,8 @@ public class runMain{
    }
    
    public static boolean historyChangeMode() {
+
+
       Scanner scan = new Scanner(System.in);
       boolean loopActivate = false;
       do {
