@@ -3,10 +3,11 @@ import java.util.ArrayList;
 public class runMain{
    public static void main(String [] args) {
       Scanner scan = new Scanner(System.in);
-      boolean loop = true, storageLoop =true;
+      boolean loop = true, storageLoop =true, historyLoop =false;
       int itemCount =0;
    
-      ArrayList<Items> itemsList = new ArrayList<>();      
+      ArrayList<Items> itemsList = new ArrayList<>();    
+      History history = new History ();  
       
       while (loop) {
          loop = false;
@@ -47,11 +48,14 @@ public class runMain{
                         Items item = new Items(name, price, quantity);
                         itemsList.add(item);
                         itemCount++;
-                        System.out.println();     
+                        System.out.println();
+                        
+                        history.stockIncreaseRecord(name, quantity, price);
+                        System.out.println();
                      }
                      System.out.println("___ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ ___");
                      System.out.println("||   Item/s successfully added to storage!   ||");
-                     System.out.println("||_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _||");                
+                     System.out.println("||_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _||\n");                
                      storageLoop = runMain.backOrChangeMode();//Back or Change Mode na choice
                      if (storageLoop == false) {
                         loop = true;
@@ -85,18 +89,30 @@ public class runMain{
                               case 2:
                                  System.out.print("Enter new price: ");
                                  double newPrice = scan.nextDouble();
+                                 double oldPrice = item.getPrice();
                                  item.setPrice(newPrice);  
+                                 history.priceChangeRecord(item.getName(), oldPrice, newPrice);
                                  System.out.println("ITEM PRICE UPDATED SUCCESSFULLY.");
                                  break;
                            
                               case 3:
                                  System.out.print("Enter new quantity: ");
                                  int newQuantity = scan.nextInt();
+                                 int oldQuantity = item.getQuantity();
+                                 if (newQuantity > oldQuantity) {
+                                    history.stockIncreaseRecord(item.getName(), newQuantity - oldQuantity, item.getPrice());
+                                 } else {
+                                    history.stockDecreaseRecord(item.getName(), oldQuantity - newQuantity, item.getPrice());
+                                 }
                                  item.setQuantity(newQuantity);  
                                  System.out.println("ITEM QUANTITY UPDATED SUCCESSFULLY.");
                                  break;
                            
                               case 4:
+                                 String oldName = item.getName();
+                                 oldPrice = item.getPrice();
+                                 oldQuantity = item.getQuantity();
+                                 
                                  scan.nextLine();
                                  System.out.print("Enter new name: ");
                                  newName = scan.nextLine();
@@ -109,6 +125,8 @@ public class runMain{
                                  System.out.print("Enter new quantity: ");
                                  newQuantity = scan.nextInt();
                                  item.setQuantity(newQuantity);
+                                 
+                                 history.updateAllRecord(oldName, oldPrice, oldQuantity, newName, newPrice, newQuantity);
                               
                                  System.out.println("ALL ITEM DETAILS UPDATED SUCCESSFULLY.");
                                  break;
@@ -131,8 +149,12 @@ public class runMain{
                   
                   else if (menuOption == 3) {
                      if (itemsList.isEmpty()) {
-                        System.out.println("No items in the inventory.");
-                        loop = true;
+                        System.out.println("\nNo items in the inventory.");
+                        storageLoop = runMain.backOrChangeMode();//Back or Change Mode na choice
+                        if (storageLoop == false) {
+                           loop = true;
+                        }
+                     
                      }else{
                         System.out.println("___ _ _ _ _ _ _ _ _ _ _ _ ___");
                         System.out.println("||    INVENTORY DETAILS    ||");
@@ -177,7 +199,7 @@ public class runMain{
                System.out.println("||       Market Mode       ||");
                System.out.println("||_ _ _ _ _ _ _ _ _ _ _ _ _|| \n");  
                if (itemsList.isEmpty()) { 
-                  System.out.println("No items yet in the Market.\n"); 
+                  System.out.println("\nNo items yet in the Market.\n"); 
                   loop = true;
                } else { 
                   System.out.println("\nITEMS AVAILABLE:"); 
@@ -189,15 +211,21 @@ public class runMain{
                   loop = true;
                }
             }
-            else {
-               System.out.println("\nError In the input! Please try again..\n");
-               loop = true;
-            }
+            
+            if (modeChoice == 3) {
+               history.displayHistory();
+               System.out.println("___ _ _ _ _ _ _ _ _ _ _ _ ___");
+               System.out.println("||         History         ||");
+               System.out.println("||_ _ _ _ _ _ _ _ _ _ _ _ _||");
+               historyLoop = runMain.historyChangeMode();
+               if (historyLoop) {
+                  loop = true;
+               }
+            }           
+            
          }                   
          catch (Exception  e) {
-            System.out.println("\nAN ERROR OCCURRED.. TRY AGAIN? [y/n]: ");
-            scan.nextLine();
-            char tryAgain = scan.next().charAt(0);
+            char tryAgain = runMain.errorHandler();
             
             if (tryAgain == 'y' || tryAgain == 'Y') {
                loop = true;
@@ -207,14 +235,14 @@ public class runMain{
             }   
          }
       }//end sa while loop
-     
-     
-         
+              
    }
    
    public static boolean backOrChangeMode() {
       Scanner scan = new Scanner(System.in);
-      boolean loopActivate = false;
+      boolean loopActivate = false, escapeLoop;
+    do {  
+      escapeLoop = true;
       System.out.print("\n[1] BACK\n[2] CHANGE MODE\nChoose an option: ");
       int choice = scan.nextInt();
       scan.nextLine();
@@ -224,8 +252,54 @@ public class runMain{
       }
       else if (choice == 2) {
          loopActivate = false;
-      } 
+      }
+      else {
+         System.out.print("\nInvalid input! Try again:");
+         escapeLoop = false;
+      }
+      }while(escapeLoop != true);
       return loopActivate; 
+   }
+   
+   public static boolean historyChangeMode() {
+      Scanner scan = new Scanner(System.in);
+      boolean loopActivate = false;
+      do {
+         System.out.print("\n[1] BACK TO MODE MENU\nChoose an option: ");
+         int choice = scan.nextInt();
+         scan.nextLine();
+                  
+         if (choice == 1) {
+            loopActivate = true;
+         }
+         else{
+            System.out.print("\nInvalid input!");
+            loopActivate = false;
+         } 
+      }while(loopActivate == false);
+      return loopActivate; 
+   }
+   
+   public static char errorHandler() {
+      Scanner scan = new Scanner(System.in);
+      System.out.println("\nAN ERROR OCCURRED..");
+      char c;
+      do {
+         System.out.print("TRY AGAIN? [y/n]: ");
+         c = scan.next().charAt(0);
+      
+         if (c == 'Y' || c == 'y') {
+            c = 'y';
+            break;
+         }else if (c == 'n' || c == 'N') {
+            c ='n';
+            break;
+         }
+         else {
+            c = 'x';
+         }
+      }while (c != 'y' || c != 'n');
+      return c;
    }
    
 }
