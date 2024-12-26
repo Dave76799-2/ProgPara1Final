@@ -51,10 +51,12 @@ public class Items {
    public int sell(int amount) {
    int itemsLeft =-10;
    if (amount > this.quantity) {
+      System.out.println();
       System.out.println("Not enough items in the inventory!!");
    }
    else {
       itemsLeft = this.quantity - amount;
+      System.out.println("Items sold!!");
    }
       return itemsLeft;
    }
