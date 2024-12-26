@@ -257,10 +257,7 @@ public class runMain{
             }
             
             if (modeChoice == 3) {
-               history.displayHistory();
-               System.out.println("___ _ _ _ _ _ _ _ _ _ _ _ ___");
-               System.out.println("||         History         ||");
-               System.out.println("||_ _ _ _ _ _ _ _ _ _ _ _ _||");
+               history.displayHistory();     
                historyLoop = runMain.historyChangeMode();
                if (historyLoop) {
                   loop = true;
@@ -332,8 +329,8 @@ public class runMain{
    }
    
    public static boolean historyChangeMode() {
-
-
+   
+   
       Scanner scan = new Scanner(System.in);
       boolean loopActivate = false;
       do {
