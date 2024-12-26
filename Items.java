@@ -48,4 +48,8 @@ public class Items {
       return this.price*this.quantity;
    }
    
+   public int sell(int amount) {
+      return this.quantity - amount;
+   }
+   
 }
